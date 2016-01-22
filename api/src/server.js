@@ -1,8 +1,15 @@
-var koa = require('koa');  
-var app = koa();
+const API_METHODS = require('./methods/api-methods');
+const koa = require('koa');
+const router = require('koa-router');
+const mount = require('koa-mount');
 
-app.use(function *(){  
-    this.body = 'Hello from koajs';
-});
+const app = koa();
+const API = new router();
 
-app.listen(3000);
+API.get('/hey', API_METHODS.hey);
+API.get('/girl', API_METHODS.girl);
+
+app.use(mount('/v1', API.middleware()));
+if (!module.parent) app.listen(3000);
+
+console.log('API running on http://localhost:3000/.\n“If you’re a bird, I’m a bird.”\n\t-Ryan Gosling, The Notebook');
